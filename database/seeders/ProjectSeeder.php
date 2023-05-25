@@ -9,6 +9,7 @@ use App\Models\Type;
 
 // importiamo Faker
 use Faker\Generator as Faker;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class ProjectSeeder extends Seeder
@@ -21,8 +22,11 @@ class ProjectSeeder extends Seeder
     // inseriamo faker con la dependency injection
     public function run( Faker $faker)
     {
-
+        
+        // per evitare l'errore prima disabilitiamo le relazioni con altre tabelle poi usiamo truncate e poi riabilitiamo
+        Schema::disableForeignKeyConstraints();
         Project::truncate();
+        Schema::enableForeignKeyConstraints();
 
         for($i=0; $i<10; $i++){
             $project = new Project();
