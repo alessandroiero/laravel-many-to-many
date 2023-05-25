@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateProjectRequest;
 use Illuminate\Support\Str;
 
 use App\Models\Project;
+use App\Models\Technology;
 use App\Models\Type;
 use Illuminate\Support\Facades\Storage;
 
@@ -34,7 +35,8 @@ class ProjectController extends Controller
     public function create()
     {
         $types = Type::all();
-        return view('admin.projects.create', compact('types'));
+        $technologies = Technology::all();
+        return view('admin.projects.create', compact('types','technologies'));
     }
 
     /**
@@ -54,10 +56,16 @@ class ProjectController extends Controller
             $project->image = Storage::put('uploads', $data['image']); // storage/public/nomefile.jpg
         }
         $project->slug =  Str::slug($data['title']);
+
+
+
         // immagine
         $project->save();
 
-        
+        // tecnologies
+        if(isset($data['technologies'])){
+        $project->technologies()->sync($data['technologies']);
+        }
 
         return redirect()->route('admin.projects.index')->with('message', 'Nuovo Progetto Creato');
     }
@@ -82,7 +90,8 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $types = Type::all();
-        return view('admin.projects.edit', compact('project','types'));
+        $technologies = Technology::all();
+        return view('admin.projects.edit', compact('project','types','technologies'));
     }
 
     /**
@@ -96,6 +105,9 @@ class ProjectController extends Controller
     {
         $data = $request->validated();
         $project->slug =  Str::slug($data['title']);
+
+        $technologies = isset($data['technologies']) ? $data['technologies'] : [];
+        $project->technologies()->sync($technologies);
 
         // immagine
         if (isset($data['image'])) {

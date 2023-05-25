@@ -39,7 +39,33 @@
           <label for="image" class="form-label py-4">IMG</label>
           <input class="form-control" type="file" id="image" name="image">
         </div>
-        {{-- /immagini --}}      
+        {{-- /immagini --}}   
+
+        {{-- tecnologies --}}
+        @if ($errors->any())
+        <div class="mb-3">
+            <div class="mb-3">technologies</div>
+            @foreach ($technologies as $technology)
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="technologies" value="{{ $technology->id }}" name="technologies[]" {{ in_array($tecnology->id, old('technologies', [])) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="technologies">{{ $technology->name }}</label>
+                </div>
+            @endforeach
+
+        </div>
+        @else
+        <div class="mb-3">
+            <div class="mb-3">technologies</div>
+            @foreach ($technologies as $technology)
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="technologies" value="{{ $technology->id }}" name="technologies[]" {{ $project->technologies->contains($technology->id) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="technologies">{{ $technology->name }}</label>
+                </div>
+            @endforeach
+        </div>
+        @endif   
+        {{-- Technologies --}}
+
         {{-- tipologia --}}
         <div class="mb-3">
           <label for="types_id" class="form-label">Types</label>

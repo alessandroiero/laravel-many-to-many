@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('project_technology', function (Blueprint $table) {
             // $table->id();
             // se viene eliminato un project vengono eliminate anche tutte le righe dove presente project_id
-            $table->foreignId('project_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('project_id')->constrained()->cascadeOnDelete(); //con casccade stiamo cancellando dalla tabella ponte
             $table->foreignId('technology_id')->constrained()->cascadeOnDelete();
 
             // senza una chiave primaria la creiamo noi con l'array formato da project id e technology id
